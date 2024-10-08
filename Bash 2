@@ -1,0 +1,79 @@
+#Задание 3-4
+
+
+FOUND_FILES=$(grep -RIZ "123" target)
+
+if cp -t. <(echo "$FOUND_FILES") 2>/dev/null; then
+  echo "cp OK"
+else
+  echo "cp FAILS"
+fi
+
+NOT_FOUND_FILES=$(grep -RLZ "123" target)
+if rm <(echo "$NOT_FOUND_FILES") 2>/dev/null; then
+  echo "rm ок"
+else
+  echo "rm FAILS"
+fi
+
+#Задание 3-5
+
+DIR1="dir1"
+DIR2="dir2"
+
+echo "Files in $DIR1 but not in $DIR2:"
+comm -23 <(ls "$DIR1" | sort) <(ls "$DIR2" | sort)
+
+echo "Files in $DIR2 but not in $DIR1:"
+comm -13 <(ls "$DIR2" | sort) <(ls "$DIR1" | sort)
+
+#Задание 3-6
+
+HOME_RC=".bashrc-home"
+WORK_RC=".bashrc-work"
+TARGET_RC=".bashrc"
+
+
+CURRENT_RC=$(readlink "$TARGET_RC" || echo "")
+
+if [ "$CURRENT_RC" == "$HOME_RC" ]; then
+  ln -sf "$WORK_RC" "$TARGET_RC"
+  echo "Switched to work configuration"
+else
+  ln -sf "$HOME_RC" "$TARGET_RC"
+  echo "Switched to home configuration"
+fi
+
+#Задание 3-7
+#include <stdio.h>
+#include <stdint.h>
+
+int8_t add_twos_complement_8(int8_t a, int8_t b) {
+    int16_t sum = a + b;
+    return (int8_t)sum;
+}
+
+int16_t add_twos_complement_16(int16_t a, int16_t b) {
+    int32_t sum = a + b;
+    return (int16_t)sum;
+}
+
+int main() {
+    int8_t a = 79;
+    int8_t b = 46;
+    int8_t result_8 = add_twos_complement_8(a, b);
+    printf("Addition of 79 and 46: %d\n", result_8);
+
+    int8_t c = -97;
+    int8_t d = -96;
+    int8_t result_8_2 = add_twos_complement_8(c, d);
+    printf("Addition of -97 and -96: %d\n", result_8_2);
+
+    int16_t e = 12868;
+    int16_t f = -1219;
+    int16_t result_16 = add_twos_complement_16(e, f);
+    printf("Addition of 12868 and -1219: %d\n", result_16);
+
+    return 0;
+}
+
